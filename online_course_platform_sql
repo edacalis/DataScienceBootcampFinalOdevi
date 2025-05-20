@@ -1,0 +1,78 @@
+-- Online Course Platform Database
+
+-- 1. Üyeler Tablosu
+CREATE TABLE members (
+    member_id INT PRIMARY KEY,
+    user_name VARCHAR(50) UNIQUE NOT NULL,
+    e_posta VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    registration_date TIMESTAMP,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50)
+);
+
+-- 2. Eğitimler Tablosu
+CREATE TABLE courses (
+    course_id INT PRIMARY KEY,
+    course_name VARCHAR(200) UNIQUE NOT NULL,
+    explanation TEXT,
+    start_date DATE,
+    finish_date DATE,
+    instructor_information VARCHAR(100)
+);
+
+-- 3. Kategoriler Tablosu
+CREATE TABLE categories (
+    category_id SMALLINT PRIMARY KEY,
+    category_name VARCHAR(100) UNIQUE NOT NULL
+);
+
+-- 4. Eğitim-Kategori İlişki Tablosu
+CREATE TABLE course_category (
+    course_id INT,
+    category_id SMALLINT,
+    PRIMARY KEY (course_id, category_id),
+    FOREIGN KEY (course_id) REFERENCES courses(course_id),
+    FOREIGN KEY (category_id) REFERENCES categories(category_id)
+);
+
+-- 5. Katılım Tablosu
+CREATE TABLE enrollments (
+    enrollment_id SERIAL PRIMARY KEY,
+    member_id INT,
+    course_id INT,
+    participation_date TIMESTAMP,
+    FOREIGN KEY (member_id) REFERENCES members(member_id),
+    FOREIGN KEY (course_id) REFERENCES courses(course_id)
+);
+
+
+
+
+
+-- 6. Sertifikalar Tablosu
+CREATE TABLE certificates (
+    certificate_id INT PRIMARY KEY,
+    certificate_code VARCHAR(100) UNIQUE NOT NULL,
+    issue_date DATE
+);
+
+-- 7. Sertifika Atama Tablosu
+CREATE TABLE certificate_assignments (
+    member_id INT,
+    certificate_id INT,
+    receiving_date DATE,
+    PRIMARY KEY (member_id, certificate_id),
+    FOREIGN KEY (member_id) REFERENCES members(member_id),
+    FOREIGN KEY (certificate_id) REFERENCES certificates(certificate_id)
+);
+
+-- 8. Blog Gönderileri Tablosu
+CREATE TABLE blog_posts (
+    blog_id SERIAL PRIMARY KEY,
+    author_information INT,
+    title VARCHAR(255),
+    content TEXT,
+    publication_date TIMESTAMP,
+    FOREIGN KEY (author_information) REFERENCES members(member_id)
+);
